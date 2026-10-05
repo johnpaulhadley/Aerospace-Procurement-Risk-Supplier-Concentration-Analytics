@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+data/raw/*
+data/processed/*
+!data/**/.gitkeep
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+.DS_Store
+.ipynb_checkpoints/

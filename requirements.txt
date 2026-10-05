@@ -1,0 +1,11 @@
+requests
+pandas
+numpy
+SQLAlchemy
+psycopg2-binary
+python-dotenv
+dbt-postgres
+dagster
+dagster-webserver
+dagster-dbt
+pytest
