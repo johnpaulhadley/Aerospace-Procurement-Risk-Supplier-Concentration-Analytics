@@ -17,6 +17,7 @@ To be written from measured results.
 - [Business case, scope and KPI definitions](docs/business_case.md)
 - [Data model](docs/data_model.md)
 - [Architecture](docs/architecture.md)
+- [Sample pull findings](docs/sample_findings.md)
 
 ## Stack
 Python, PostgreSQL, dbt, Dagster, Power BI, Docker
@@ -26,5 +27,5 @@ Python, PostgreSQL, dbt, Dagster, Power BI, Docker
 cp .env.example .env
 docker compose up -d
 pip install -r requirements.txt
-python ingestion/pull_sample.py --start 2025-06-01 --end 2025-06-07 --psc 1510
+python ingestion/bulk_download.py --start 2024-06 --end 2024-06
 ```

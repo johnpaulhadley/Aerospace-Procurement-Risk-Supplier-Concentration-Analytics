@@ -27,7 +27,8 @@
 | `pipeline_health_daily` | one load day | data-quality monitoring |
 
 ## Loading and optimization
-- **Backfill**: bulk yearly files per agency from USAspending, loaded by fiscal year.
-- **Incremental**: API pulls by action date; dbt incremental models reprocess a trailing window because agencies report late and modify past actions.
+- **Backfill**: USAspending bulk download API, one job per agency per month of action date (`ingestion/bulk_download.py`), filtered to in-scope PSC groups at load.
+- **Incremental**: the same API for recent months; dbt incremental models reprocess a trailing window because agencies report late and modify past actions.
+- **Reconciliation**: row counts and obligation totals checked against the USAspending search API.
 - **Partitioning**: `fact_contract_transactions` range-partitioned by action date (fiscal year); indexes on supplier, PSC and award keys.
 - **Proof**: `EXPLAIN ANALYZE` timings for the same dashboard query against the fact table and against the mart, recorded in `docs/architecture.md`.
