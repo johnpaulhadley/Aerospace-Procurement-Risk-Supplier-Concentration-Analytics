@@ -195,7 +195,7 @@ Add a text box: "Awards of $1 million or more. Awards signed before FY2018 show 
 
 ## 5. Publish
 
-1. Save the file as `dashboards/aerospace_procurement_risk.pbix` in the repo. It will be large because the data is embedded. If it exceeds 100 MB, GitHub will reject it, so keep it out of git and link to the published report.
+1. Save the file as `dashboards/aerospace_procurement_risk.pbix` in the repo folder. The data is embedded, so the file is large and is excluded from git. The README links to the published report and screenshots instead.
 2. **Home > Publish > My workspace.**
 3. For a public link, open the report at app.powerbi.com and choose **File > Embed report > Publish to web (public)**. Universities often disable this for student accounts. If the option is missing or blocked, use screenshots and a short screen recording in the README.
 4. Export each page as a PNG (**File > Export > Export to PDF**, or screenshots) into `images/` for the README.
