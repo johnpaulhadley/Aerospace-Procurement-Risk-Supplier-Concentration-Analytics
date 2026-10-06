@@ -50,5 +50,5 @@ def database_url():
     return "postgresql+psycopg2://{u}:{p}@{h}:{port}/{db}".format(
         u=os.environ["POSTGRES_USER"], p=os.environ["POSTGRES_PASSWORD"],
         h=os.environ.get("POSTGRES_HOST", "localhost"),
-        port=os.environ.get("POSTGRES_PORT", "5432"), db=os.environ["POSTGRES_DB"],
+        port=os.environ.get("POSTGRES_PORT", "5433"), db=os.environ["POSTGRES_DB"],
     )
