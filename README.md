@@ -18,6 +18,7 @@ To be written from measured results.
 - [Data model](docs/data_model.md)
 - [Architecture](docs/architecture.md)
 - [Sample pull findings](docs/sample_findings.md)
+- [Power BI build guide](docs/power_bi_build_guide.md)
 
 ## Stack
 Python, PostgreSQL, dbt, Dagster, Power BI, Docker
