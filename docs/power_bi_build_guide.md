@@ -56,7 +56,7 @@ Open **Model view** and create these. All are one-to-many, single direction, fro
 | Category Group | Supplier Monthly | `psc_group` |
 | Category Group | Contracts | `psc_group` |
 
-Delete any other relationship Power BI created by itself. Then select the Month table and choose **Table tools > Mark as date table**, using `month_start`.
+Delete any other relationship Power BI created by itself. Do not mark Month as a date table: that requires one row per day, and this table has one row per month. None of the measures use built-in time calculations. Untick **Auto date/time** under **File > Options and settings > Options > Current File > Data Load**.
 
 Sort `Month[month_label]` by `Month[month_start]` (select the column, **Column tools > Sort by column**), so months appear in calendar order.
 
