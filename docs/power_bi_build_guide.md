@@ -34,6 +34,8 @@ This guide builds the four-page report from the CSV files in `data/processed/pow
 In Power Query, check these column types before **Close & Apply**:
 
 - `psc_group` and `psc_code`: **Text** in every table. Power BI will guess whole number for codes like `15`, which breaks the joins to codes like `AC`. Fix this first.
+- `award_piid` in Contracts: **Text**. Award IDs mix letters and digits, and Power BI guesses whole number, which turns most rows into errors. Choose **Replace current** when asked.
+- If the load stalls on "Detecting relationships", cancel it and untick **File > Options and settings > Options > Current File > Data Load > Autodetect new relationships after data is loaded**.
 - `month_start` and the date columns in Contracts: **Date**.
 - Dollar columns: **Decimal Number**.
 - `hhi`, `risk_score`, `priority_rank`, `fiscal_year`: **Whole Number**.
