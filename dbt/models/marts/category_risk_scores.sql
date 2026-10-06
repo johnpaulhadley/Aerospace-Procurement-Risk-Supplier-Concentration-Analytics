@@ -33,7 +33,7 @@ joined as (
     left join {{ ref('category_monthly_behavior') }} b
         using (category_level, category_code, month_start)
     left join {{ ref('price_index_map') }} map
-        on map.psc_group = left(m.category_code, 2)
+        on map.psc_group = {{ psc_group('m.category_code') }}
     left join {{ ref('price_index_map') }} fallback
         on fallback.psc_group = 'DEFAULT'
     left join {{ ref('fact_price_index') }} x
@@ -61,12 +61,31 @@ ranked as (
 
 select
     j.*,
+    g.category_name,
     case
         when j.hhi >= 2500 then 'High'
         when j.hhi >= 1500 then 'Moderate'
         when j.hhi is not null then 'Low'
     end                                                         as concentration_band,
     round(100 * (r.hhi_rank + r.not_competed_rank + r.modification_rank
-                 + r.extension_rank + r.price_rank) / 5)        as risk_score
+                 + r.extension_rank + r.price_rank) / 5)        as risk_score,
+    j.t12m_obligation / nullif(sum(j.t12m_obligation) over (
+        partition by j.category_level, j.month_start), 0)       as share_of_total_obligation,
+    -- The score ranks likelihood-style indicators and ignores size, so it is
+    -- read together with spend. Thresholds: score of 50 and $1 billion.
+    case
+        when not j.is_material then null
+        when r.risk_score_raw >= 50 and j.t12m_obligation >= 1000000000 then '1 Act first: large and high score'
+        when j.t12m_obligation >= 1000000000                             then '2 Watch: large, lower score'
+        when r.risk_score_raw >= 50                                      then '3 Review: smaller, high score'
+        else '4 Monitor'
+    end                                                         as priority_tier
 from joined j
-left join ranked r using (category_level, category_code, month_start)
+left join (
+    select *, 100 * (hhi_rank + not_competed_rank + modification_rank
+                     + extension_rank + price_rank) / 5 as risk_score_raw
+    from ranked
+) r using (category_level, category_code, month_start)
+left join (
+    select distinct psc_group, category_name from {{ ref('dim_product_service') }}
+) g on g.psc_group = {{ psc_group('j.category_code') }}

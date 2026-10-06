@@ -56,7 +56,7 @@ typed as (
 
         product_or_service_code                               as psc_code,
         product_or_service_code_description                   as psc_description,
-        left(product_or_service_code, 2)                      as psc_group,
+        {{ psc_group('product_or_service_code') }}              as psc_group,
         naics_code,
         naics_description,
         case

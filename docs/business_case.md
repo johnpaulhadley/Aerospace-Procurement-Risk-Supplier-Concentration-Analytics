@@ -39,6 +39,17 @@ No supplier is labelled late, poor quality or deficient. Public contract data su
 
 Material categories are those with at least $100 million in trailing 12-month obligations. Smaller categories get no score because their shares are unstable.
 
+Reading the score with spend. The score ignores size, so each material category also gets a priority tier from two thresholds, a score of 50 and $1 billion in trailing 12-month obligations:
+
+| Tier | Rule |
+|---|---|
+| 1 Act first | score 50 or more and spend $1 billion or more |
+| 2 Watch | spend $1 billion or more, score under 50 |
+| 3 Review | score 50 or more, spend under $1 billion |
+| 4 Monitor | everything else |
+
+Category groups: products group on the first two characters of the PSC, research and development on the first two (separating defense from space R&D), and other services on their first letter. Group names come from the `psc_group_names` seed.
+
 Price indices (FRED, Bureau of Labor Statistics): engines use the aircraft engine and engine parts index, aircraft components use the other aircraft parts index, and every other category uses the broad aerospace product and parts index. No missile-specific index is used, so price change separates categories only weakly.
 
 ## Success criteria

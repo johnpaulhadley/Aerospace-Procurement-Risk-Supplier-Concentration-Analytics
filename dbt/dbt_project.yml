@@ -17,6 +17,13 @@ models:
 seeds:
   aerospace_procurement:
     +schema: reference
-    +column_types:
-      valid_from: date
-      valid_to: date
+    supplier_ownership:
+      +column_types:
+        valid_from: date
+        valid_to: date
+    psc_group_names:
+      +column_types:
+        psc_group: text
+    price_index_map:
+      +column_types:
+        psc_group: text

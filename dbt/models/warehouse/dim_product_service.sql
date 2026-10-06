@@ -4,30 +4,30 @@ with latest as (
         psc_code, psc_description
     from {{ ref('stg_contract_transactions') }}
     order by psc_code, action_date desc
+),
+
+grouped as (
+    select
+        psc_code,
+        psc_description,
+        {{ psc_group('psc_code') }} as psc_group
+    from latest
 )
 
 select
-    psc_code                                                  as psc_key,
-    psc_code,
-    psc_description,
-    left(psc_code, 2)                                         as psc_group,
-    case left(psc_code, 2)
-        when '14' then 'Guided missiles'
-        when '15' then 'Aircraft and airframe structures'
-        when '16' then 'Aircraft components and accessories'
-        when '17' then 'Aircraft launching, landing and ground handling'
-        when '18' then 'Space vehicles'
-        when '28' then 'Engines and turbines'
-        else case
-            when psc_code ~ '^A' then 'Research and development'
-            when psc_code ~ '^J' then 'Maintenance and repair'
-            when psc_code ~ '^[B-Z]' then 'Other services'
-            else 'Other products'
-        end
-    end                                                       as category_name,
+    g.psc_code                                                as psc_key,
+    g.psc_code,
+    g.psc_description,
+    g.psc_group,
+    coalesce(
+        n.category_name,
+        case when g.psc_code ~ '^A' then 'Other research and development' else 'Unclassified' end
+    )                                                         as category_name,
     case
-        when psc_code ~ '^A' then 'Research and development'
-        when psc_code ~ '^[B-Z]' then 'Services'
+        when g.psc_code ~ '^A' then 'Research and development'
+        when g.psc_code ~ '^[B-Z]' then 'Services'
         else 'Products'
-    end                                                       as category_type
-from latest
+    end                                                       as category_type,
+    g.psc_group in ('14', '15', '16', '17', '18', '28')       as is_core_aerospace_product
+from grouped g
+left join {{ ref('psc_group_names') }} n using (psc_group)
