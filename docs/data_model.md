@@ -37,7 +37,7 @@
 - `raw.contract_transactions`: 60 of the 297 source columns, stored as text, plus `_source_file` and `_loaded_at`. Reloading a file replaces its rows.
 - `raw.load_log`: rows read, rows loaded and net obligations per file load.
 - `staging.stg_contract_transactions`: typed, de-duplicated across overlapping files, with scope basis, competition flag, acquisition program and consolidated parent name.
-- `reference.supplier_parent_overrides` (dbt seed): manual parent-name consolidation, extended as variants are found.
+- `reference.supplier_ownership` (dbt seed): dated ownership rules. A company keeps its own name until its acquisition or merger date and takes the acquirer's name from that day. Also fixes name variants and subsidiaries reported as parents. Each rule records its reason.
 
 Checked on June 2024: 11,730 in-scope rows and $8.16B net obligations in staging, matching the independent profile; a deliberately overlapping file added 78 raw rows and none to staging.
 

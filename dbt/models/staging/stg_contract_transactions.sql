@@ -85,9 +85,13 @@ typed as (
     from deduplicated
 )
 
+-- Ownership is applied by date: a company keeps its own name until the day it
+-- was acquired or merged, and takes the acquirer's name from that day on.
 select
     typed.*,
-    coalesce(overrides.consolidated_parent_name, typed.parent_name_reported) as parent_name
+    coalesce(ownership.supplier_name, typed.parent_name_reported) as parent_name
 from typed
-left join {{ ref('supplier_parent_overrides') }} as overrides
-    on typed.parent_name_reported = overrides.recipient_parent_name
+left join {{ ref('supplier_ownership') }} as ownership
+    on typed.parent_name_reported = ownership.reported_parent_name
+   and typed.action_date >= ownership.valid_from
+   and typed.action_date <  ownership.valid_to

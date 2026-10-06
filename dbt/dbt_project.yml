@@ -17,3 +17,6 @@ models:
 seeds:
   aerospace_procurement:
     +schema: reference
+    +column_types:
+      valid_from: date
+      valid_to: date

@@ -43,6 +43,20 @@ EXPORTS = {
         from warehouse.fact_contract_transactions f
         join warehouse.dim_supplier s using (supplier_key)
         group by 1, 2, 3 order by 4 desc limit 200""",
+    "qa_supplier_by_year": """
+        select s.supplier_name, f.fiscal_year, sum(f.obligation_amount) as net_obligation
+        from warehouse.fact_contract_transactions f
+        join warehouse.dim_supplier s using (supplier_key)
+        group by 1, 2
+        having abs(sum(f.obligation_amount)) >= 50000000
+        order by 1, 2""",
+    "qa_reported_names": """
+        select fiscal_year, parent_name as supplier_name, parent_name_reported, parent_uei,
+               recipient_name, sum(obligation_amount) as net_obligation
+        from staging.stg_contract_transactions
+        group by 1, 2, 3, 4, 5
+        having abs(sum(obligation_amount)) >= 50000000
+        order by 1, 6 desc""",
     "qa_table_sizes": """
         select schemaname || '.' || relname as table_name, n_live_tup as approx_rows,
                pg_total_relation_size(relid) as bytes
