@@ -24,5 +24,10 @@ select
     scope_basis,
     is_not_competed,
     obligation_amount,
-    performance_current_end_date
+    performance_current_end_date,
+    -- Days the award's current end date moved on this action, compared with the
+    -- previous action on the same award. Null on an award's first action in the data.
+    performance_current_end_date - lag(performance_current_end_date) over (
+        partition by award_key order by action_date, modification_number
+    )                                                         as end_date_moved_days
 from {{ ref('stg_contract_transactions') }}

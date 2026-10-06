@@ -18,6 +18,8 @@ OUT = Path("data/processed")
 EXPORTS = {
     "category_monthly_metrics": "select * from marts.category_monthly_metrics",
     "supplier_monthly_metrics": "select * from marts.supplier_monthly_metrics",
+    "category_risk_scores": "select * from marts.category_risk_scores",
+    "fact_price_index": "select * from warehouse.fact_price_index",
     "dim_supplier": "select * from warehouse.dim_supplier",
     "dim_product_service": "select * from warehouse.dim_product_service",
     "qa_yearly_totals": """

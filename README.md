@@ -29,6 +29,8 @@ docker compose up -d            # PostgreSQL
 pip install -r requirements.txt
 python ingestion/backfill_archive.py --start-fy 2018 --end-fy 2026   # yearly files
 python ingestion/load_raw.py data/raw/archive                         # in-scope rows into PostgreSQL
-cd dbt && dbt build --profiles-dir .                                  # staging models and tests
+python ingestion/fetch_price_index.py                                 # producer price indices from FRED
+cd dbt && dbt build --profiles-dir . && cd ..                         # warehouse, marts and tests
+python ingestion/export_marts.py                                      # CSVs for analysis and Power BI
 ```
 `ingestion/bulk_download.py` pulls single months through the USAspending API for incremental loads.

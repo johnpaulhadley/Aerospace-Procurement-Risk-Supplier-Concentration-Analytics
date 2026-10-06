@@ -6,3 +6,5 @@ sources:
       - name: contract_transactions
         description: In-scope USAspending contract transactions, loaded as text by ingestion/load_raw.py.
       - name: load_log
+      - name: price_index
+        description: Monthly producer price index values from FRED, loaded by ingestion/fetch_price_index.py.

@@ -31,11 +31,15 @@ No supplier is labelled late, poor quality or deficient. Public contract data su
 | 1 | Supplier concentration (HHI) | Sum of squared supplier shares of net obligations within a category, rolling 12 months, on a 0 to 10,000 scale | Higher means fewer suppliers hold the spend. Default bands: under 1,500 low, 1,500 to 2,500 moderate, over 2,500 high (configurable) |
 | 2 | Top-4 share | Share of category obligations held by the four largest suppliers, rolling 12 months | Simple companion to HHI |
 | 3 | Limited-competition share | Share of obligations on awards not competed, or competed with one offer received | Dependency on a single source |
-| 4 | Modification intensity | Modifications per award, and net obligation growth from base award to latest action | Awards whose value moved far from the original |
-| 5 | Schedule movement | Days between the first recorded and the latest recorded current end date of an award | Awards whose completion date moved |
-| 6 | Cost escalation exposure | Year-over-year change in the producer price index mapped to the category, multiplied by trailing 12-month obligations | Dollars exposed to rising input prices |
+| 4 | Modification intensity | Modifications per new award over a trailing 12 months | Categories whose awards are changed most often |
+| 5 | Schedule movement | Share of modifications that move an award's current end date later by more than 30 days, trailing 12 months | Categories whose completion dates keep moving |
+| 6 | Cost escalation exposure | Year-over-year change in the mapped producer price index, multiplied by trailing 12-month obligations | Dollars exposed to rising input prices |
 | 7 | Supplier financial exposure | Net obligations by supplier, category and place of performance state | Where money is concentrated |
-| 8 | Composite risk score | Equal-weighted average of percentile ranks of KPIs 1, 3, 4, 5 and 6 within the scope, 0 to 100 | A ranking aid. Weights are documented and adjustable |
+| 8 | Composite risk score | Equal-weighted average of the percentile ranks of KPIs 1, 3, 4, 5 and 6 among material categories in the same month, 0 to 100 | A ranking aid for where to look first. Weights are documented and adjustable |
+
+Material categories are those with at least $100 million in trailing 12-month obligations. Smaller categories get no score because their shares are unstable.
+
+Price indices (FRED, Bureau of Labor Statistics): engines use the aircraft engine and engine parts index, aircraft components use the other aircraft parts index, and every other category uses the broad aerospace product and parts index. No missile-specific index is used, so price change separates categories only weakly.
 
 ## Success criteria
 1. A named, dollar-denominated answer to: which five categories carry the most exposed spend, and why.

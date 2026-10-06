@@ -1,0 +1,4 @@
+psc_group,series_id,basis
+28,PCU336412336412,engines map to the aircraft engine and engine parts index
+16,PCU336413336413,aircraft components map to the other aircraft parts index
+DEFAULT,PCU33643364,all other categories use the broad aerospace product and parts index
