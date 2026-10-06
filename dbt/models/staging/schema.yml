@@ -1,0 +1,27 @@
+version: 2
+models:
+  - name: stg_contract_transactions
+    description: Typed, de-duplicated contract transactions in project scope. One row per transaction.
+    columns:
+      - name: transaction_key
+        data_tests: [unique, not_null]
+      - name: award_key
+        data_tests: [not_null]
+      - name: action_date
+        data_tests: [not_null]
+      - name: obligation_amount
+        description: Net federal action obligation. Negative values are de-obligations and are kept.
+        data_tests: [not_null]
+      - name: parent_uei
+        data_tests: [not_null]
+      - name: parent_name
+        data_tests: [not_null]
+      - name: psc_code
+        data_tests: [not_null]
+      - name: scope_basis
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['product and industry', 'product only', 'industry only']
+      - name: extent_competed
+        data_tests: [not_null]

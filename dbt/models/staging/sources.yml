@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: contract_transactions
+        description: In-scope USAspending contract transactions, loaded as text by ingestion/load_raw.py.
+      - name: load_log

@@ -24,8 +24,11 @@ Python, PostgreSQL, dbt, Dagster, Power BI, Docker
 
 ## Run locally
 ```
-cp .env.example .env
-docker compose up -d
+cp .env.example .env            # then set a password
+docker compose up -d            # PostgreSQL
 pip install -r requirements.txt
-python ingestion/bulk_download.py --start 2024-06 --end 2024-06
+python ingestion/backfill_archive.py --start-fy 2018 --end-fy 2026   # yearly files
+python ingestion/load_raw.py data/raw/archive                         # in-scope rows into PostgreSQL
+cd dbt && dbt build --profiles-dir .                                  # staging models and tests
 ```
+`ingestion/bulk_download.py` pulls single months through the USAspending API for incremental loads.

@@ -1,0 +1,13 @@
+name: aerospace_procurement
+version: "1.0"
+profile: aerospace_procurement
+model-paths: ["models"]
+seed-paths: ["seeds"]
+models:
+  aerospace_procurement:
+    staging:
+      +schema: staging
+      +materialized: view
+seeds:
+  aerospace_procurement:
+    +schema: reference

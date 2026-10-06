@@ -12,10 +12,10 @@ USAspending records what federal agencies buy. "Supplier" here means a **prime c
 | Agencies | Department of Defense and NASA (awarding agency) |
 | Award types | Prime contracts: definitive contracts, purchase orders, delivery orders, BPA calls |
 | Period | Federal FY2018 to present (action date on or after 2017-10-01) |
-| Categories | Product or Service Code (PSC) groups 14 guided missiles, 15 aircraft and airframe structures, 16 aircraft components, 17 launch/landing/ground handling, 18 space vehicles, 28 engines and turbines |
+| Categories | A transaction is in scope if either rule holds. Product rule: Product or Service Code (PSC) groups 14 guided missiles, 15 aircraft and airframe structures, 16 aircraft components, 17 launch/landing/ground handling, 18 space vehicles, 28 engines and turbines. Industry rule: NAICS 3364xx, aerospace product and parts manufacturing, which adds R&D, sustainment and engineering support. Each row records which rule matched (`scope_basis`). |
 | Grain | One row per contract transaction (base award or modification) |
 
-PSC group membership and field availability are confirmed in the sample step before the schema is frozen.
+Scope and field availability were checked against June 2024 data; see `sample_findings.md`.
 
 ## Guardrail
 No supplier is labelled late, poor quality or deficient. Public contract data supports statements about spend, concentration, modifications, competition and changes in performance dates. It does not contain delivery or defect records. Every metric below is a **risk indicator**, not a performance verdict.
