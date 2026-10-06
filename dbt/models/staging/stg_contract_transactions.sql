@@ -70,9 +70,10 @@ typed as (
         award_type,
         type_of_contract_pricing                              as pricing_type,
         action_type,
-        extent_competed,
-        extent_competed in ('NOT COMPETED', 'NOT COMPETED UNDER SAP',
-                            'NOT AVAILABLE FOR COMPETITION')  as is_not_competed,
+        -- Some actions carry no competition status; label them instead of dropping them.
+        coalesce(nullif(trim(extent_competed), ''), 'NOT REPORTED') as extent_competed,
+        coalesce(extent_competed in ('NOT COMPETED', 'NOT COMPETED UNDER SAP',
+                                     'NOT AVAILABLE FOR COMPETITION'), false) as is_not_competed,
         nullif(number_of_offers_received, '')::numeric::int   as offers_received,
         nullif(upper(trim(dod_acquisition_program_description)), 'NONE') as acquisition_program,
 
