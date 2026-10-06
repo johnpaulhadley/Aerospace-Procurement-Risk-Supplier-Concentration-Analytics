@@ -2,9 +2,9 @@
 
 ## Layers
 1. **raw**: transactions and price indices as received, plus load metadata (`_loaded_at`, `_source_file`). Never edited.
-2. **staging** (dbt views): types cast, names standardized, duplicates removed, nulls handled.
+2. **staging** (dbt tables): types cast, names standardized, duplicates removed, nulls handled.
 3. **warehouse** (dbt tables): star schema below.
-4. **marts** (dbt incremental tables): monthly aggregates that Power BI reads.
+4. **marts** (dbt tables): monthly aggregates that Power BI reads.
 
 ## Star schema
 | Table | Grain | Key columns |
@@ -30,7 +30,7 @@
 - **Backfill**: USAspending bulk download API, one job per agency per month of action date (`ingestion/bulk_download.py`), filtered to in-scope PSC groups at load.
 - **Incremental**: the same API for recent months; dbt incremental models reprocess a trailing window because agencies report late and modify past actions.
 - **Reconciliation**: row counts and obligation totals checked against the USAspending search API.
-- **Partitioning**: `fact_contract_transactions` range-partitioned by action date (fiscal year); indexes on supplier, PSC and award keys.
+- **Indexing**: `fact_contract_transactions` is indexed on action date, supplier, PSC and contract keys. Source data is partitioned by fiscal-year file, and each file can be reloaded on its own.
 - **Proof**: `EXPLAIN ANALYZE` timings for the same dashboard query against the fact table and against the mart, recorded in `docs/architecture.md`.
 
 ## Built so far
@@ -40,3 +40,11 @@
 - `reference.supplier_parent_overrides` (dbt seed): manual parent-name consolidation, extended as variants are found.
 
 Checked on June 2024: 11,730 in-scope rows and $8.16B net obligations in staging, matching the independent profile; a deliberately overlapping file added 78 raw rows and none to staging.
+
+## Warehouse and marts (built)
+- Dimensions: `dim_date`, `dim_supplier`, `dim_product_service`, `dim_agency`, `dim_location`, `dim_contract`.
+- Fact: `fact_contract_transactions`, with relationship tests to every dimension.
+- Marts: `supplier_monthly_metrics`, `category_monthly_metrics` (trailing 12-month HHI, top-4 share and not-competed share at PSC and PSC-group level), `contract_risk_summary`.
+- Tests: 44 in total, including a reconciliation of both monthly marts to the fact table and a range check on HHI.
+- Known limit: small categories produce unstable shares. Dashboards should apply a minimum-dollar filter.
+- `supplier_key` is a hash of the consolidated parent name, because the source splits some companies across several parent UEIs.

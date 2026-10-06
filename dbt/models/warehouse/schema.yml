@@ -1,0 +1,48 @@
+version: 2
+models:
+  - name: dim_date
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+  - name: dim_supplier
+    columns:
+      - name: supplier_key
+        data_tests: [unique, not_null]
+  - name: dim_product_service
+    columns:
+      - name: psc_key
+        data_tests: [unique, not_null]
+  - name: dim_agency
+    columns:
+      - name: agency_key
+        data_tests: [unique, not_null]
+  - name: dim_location
+    columns:
+      - name: location_key
+        data_tests: [unique, not_null]
+  - name: dim_contract
+    columns:
+      - name: contract_key
+        data_tests: [unique, not_null]
+  - name: fact_contract_transactions
+    columns:
+      - name: transaction_key
+        data_tests: [unique, not_null]
+      - name: supplier_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_supplier'), field: supplier_key}}
+      - name: contract_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_contract'), field: contract_key}}
+      - name: psc_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_product_service'), field: psc_key}}
+      - name: agency_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_agency'), field: agency_key}}
+      - name: location_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_location'), field: location_key}}
+      - name: date_key
+        data_tests:
+          - relationships: {arguments: {to: ref('dim_date'), field: date_key}}
