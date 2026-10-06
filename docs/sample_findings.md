@@ -55,3 +55,13 @@ Northrop Grumman parents: $1.08B net in the month across all categories, $116M i
 - Limited-competition KPI is built on `extent_competed`; offers received is a secondary signal.
 - Program drilldown is dollar-weighted and DoD only.
 - `dim_supplier` needs a manual parent-consolidation mapping on top of parent UEI.
+
+# Supplier ownership checks on the full history (2026-10-05)
+
+Checked with `qa_reported_names.csv` and `qa_supplier_by_year.csv`.
+
+- "ROCKWELL COLLINS AUSTRALIA PTY LIMITED" is the RTX parent mislabelled in FY2023 to FY2025: its recipients are Raytheon Company, RTX Corporation, Goodrich and Hamilton Sundstrand.
+- "COMPAGNIE DE DEVELOPPEMENT DE L'EAU S.A." and "BALL CORPORATION" carry BAE Systems recipients in FY2024 to FY2026.
+- Parent names are mostly reported as of the action date, but some are restated: United Technologies appears as "RTX CORP" and Harris as "L3HARRIS" before their mergers. Recipient names are restated to current names throughout.
+- Known limit: before the 2019 merger, a small amount reported under the "L3HARRIS" parent belongs to an L3 unit (about $0.2B) and is attributed to Harris by the dated rule.
+- Rules are checked only for suppliers above $50M in a fiscal year. Smaller name variants remain.
