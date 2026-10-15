@@ -66,12 +66,15 @@ USAspending yearly archives + monthly API     FRED price indices
         dbt: staging -> star schema -> monthly marts, 53 tests
                  |
         CSV export -> Power BI
+
+All of it is orchestrated as Dagster assets.
 ```
 
 - **Ingestion** (`ingestion/`): downloads yearly archive files for the backfill and monthly files through the API for incremental loads, filters to scope while loading, and records every load. Reloading a file replaces its rows.
 - **Cleaning** (`dbt/models/staging`): types every field, removes duplicates that appear in overlapping files, and applies dated supplier ownership so a company keeps its own name until its merger closing date.
 - **Warehouse** (`dbt/models/warehouse`): a star schema with six dimensions and a transaction fact table, with relationship tests to every dimension.
 - **Marts** (`dbt/models/marts`): trailing 12-month concentration (HHI, top-four share), competition, modification and schedule indicators, price exposure, and a composite risk score. Tests reconcile the marts to the fact table to the cent.
+- **Orchestration** (`orchestration/`): Dagster defines every step as an asset. Contract data is partitioned by fiscal year, so the backfill is a nine-partition run and any single year can be reloaded on its own. dbt models and their tests appear as assets and checks, a `full_refresh` job rebuilds everything downstream of the loaded data, and a monthly schedule reloads the current fiscal year on the 8th, after USAspending refreshes its files.
 - **SQL techniques** used where the analysis needed them: window functions for de-duplication, ranking, lagged end dates and rolling sums; range-based trailing windows; date-effective joins for ownership; and percentile ranks for the score.
 
 ### Risk score
@@ -86,7 +89,7 @@ An equal-weighted average of five percentile ranks among categories with at leas
 - [Power BI build guide](docs/power_bi_build_guide.md)
 
 ## Stack
-Python (pandas, SQLAlchemy, requests), PostgreSQL, dbt, Docker, Power BI. Dagster scheduling is planned.
+Python (pandas, SQLAlchemy, requests), PostgreSQL, dbt, Dagster, Docker, Power BI.
 
 ## Run locally
 ```
@@ -100,5 +103,9 @@ python ingestion/fetch_price_index.py                                 # producer
 set -a; source .env; set +a
 cd dbt && dbt build --profiles-dir . && cd ..                         # warehouse, marts and tests
 python ingestion/export_powerbi.py                                    # CSVs for the Power BI report
+```
+Or run the same steps through Dagster, which shows the asset graph and run history at http://127.0.0.1:3000:
+```
+dagster dev -m orchestration.definitions
 ```
 `ingestion/bulk_download.py` pulls single months through the USAspending API for incremental loads.

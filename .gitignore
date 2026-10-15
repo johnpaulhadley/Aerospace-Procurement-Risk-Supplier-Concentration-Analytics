@@ -12,3 +12,5 @@ dbt/logs/
 .ipynb_checkpoints/
 dbt/.user.yml
 *.pbix
+.tmp_dagster_home_*/
+dagster_home/

@@ -47,6 +47,26 @@ def save(url, dest):
     tmp.rename(dest)
 
 
+def download_year(fiscal_year, agencies=None, ids=None):
+    """Download the full-year contract file for each agency. Returns the local paths."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for key in agencies or list(AGENCIES):
+        code = AGENCIES[key]["toptier_code"]
+        existing = sorted(OUT.glob(f"FY{fiscal_year}_{code}_Contracts_Full_*.zip"))
+        if existing:
+            print(f"skip FY{fiscal_year} {key} (already downloaded)")
+            paths.append(existing[-1])
+            continue
+        ids = ids or agency_ids()
+        f = full_file(ids[code], fiscal_year)
+        print(f"downloading {f['file_name']} ...", flush=True)
+        save(f["url"], OUT / f["file_name"])
+        print(f"saved {f['file_name']}")
+        paths.append(OUT / f["file_name"])
+    return paths
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--start-fy", type=int, required=True)
@@ -54,18 +74,9 @@ def main():
     p.add_argument("--agencies", nargs="+", default=list(AGENCIES), choices=list(AGENCIES))
     args = p.parse_args()
 
-    OUT.mkdir(parents=True, exist_ok=True)
     ids = agency_ids()
     for fy in range(args.start_fy, args.end_fy + 1):
-        for key in args.agencies:
-            code = AGENCIES[key]["toptier_code"]
-            if list(OUT.glob(f"FY{fy}_{code}_Contracts_Full_*.zip")):
-                print(f"skip FY{fy} {key} (already downloaded)")
-                continue
-            f = full_file(ids[code], fy)
-            print(f"downloading {f['file_name']} ...", flush=True)
-            save(f["url"], OUT / f["file_name"])
-            print(f"saved {f['file_name']}")
+        download_year(fy, args.agencies, ids)
 
 
 if __name__ == "__main__":
