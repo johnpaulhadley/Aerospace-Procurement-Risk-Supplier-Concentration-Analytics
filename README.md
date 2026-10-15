@@ -31,7 +31,7 @@ These follow from the indicators above. They identify where to look, not what th
 
 ## Dashboard
 
-A four-page Power BI report built on the exported marts. Screenshots are below; the report file is not in the repository because it embeds the data.
+A four-page Power BI report built on the exported marts. A [PDF of all four pages](dashboards/aerospace_procurement_risk.pdf) and screenshots are below. The report file itself is not in the repository because it embeds the data.
 
 | Page | Question it answers |
 |---|---|
