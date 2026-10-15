@@ -70,6 +70,8 @@ USAspending yearly archives + monthly API     FRED price indices
 All of it is orchestrated as Dagster assets.
 ```
 
+![Dagster asset lineage](images/dagster_lineage.png)
+
 - **Ingestion** (`ingestion/`): downloads yearly archive files for the backfill and monthly files through the API for incremental loads, filters to scope while loading, and records every load. Reloading a file replaces its rows.
 - **Cleaning** (`dbt/models/staging`): types every field, removes duplicates that appear in overlapping files, and applies dated supplier ownership so a company keeps its own name until its merger closing date.
 - **Warehouse** (`dbt/models/warehouse`): a star schema with six dimensions and a transaction fact table, with relationship tests to every dimension.
